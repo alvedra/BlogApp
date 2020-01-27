@@ -7,4 +7,6 @@
     <string name="register_hint_password">Password</string>
     <string name="register_hint_confirm_password">Confirm Password</string>
     <string name="register_button">Register</string>
+    <string name="login_button">Login</string>
+    <string name="login_have_no_account">Doesn\'t have an account? <u>Register Now</u></string>
 </resources>
