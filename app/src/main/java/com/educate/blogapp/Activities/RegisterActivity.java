@@ -51,6 +51,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         // find view
         imgUserPhoto = findViewById(R.id.imgRegUserPhoto);
+        imgUserPhoto.setTag("empty");
+
         userEmail = findViewById(R.id.tvRegEmail);
         userName = findViewById(R.id.tvRegName);
         userPassword = findViewById(R.id.tvRegPass);
@@ -83,7 +85,9 @@ public class RegisterActivity extends AppCompatActivity {
                 final String password2 = userPassword2.getText().toString();
                 final String name = userName.getText().toString();
 
-                if (email.isEmpty() || name.isEmpty() || password.isEmpty() || password2.isEmpty() || !password.equals(password2)) {
+                if (email.isEmpty() || name.isEmpty() || password.isEmpty() || password2.isEmpty() || !password.equals(password2)
+                    || (imgUserPhoto.getTag().equals("empty"))
+                ) {
                     showMessage("Please fill all fields correctly");
                     regButton.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.INVISIBLE);
@@ -91,6 +95,7 @@ public class RegisterActivity extends AppCompatActivity {
                 else {
                     createUserAccount(email, name, password);
                 }
+
             }
         });
     }
@@ -199,6 +204,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == REQUESTCODE && data != null) {
             pickedImageUri = data.getData();
             imgUserPhoto.setImageURI(pickedImageUri);
+            imgUserPhoto.setTag("picked");
         }
     }
 }
