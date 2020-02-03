@@ -1,14 +1,16 @@
 package com.educate.blogapp.Activities;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.educate.blogapp.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -29,6 +31,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class HomeActivity extends AppCompatActivity {
@@ -37,6 +40,10 @@ public class HomeActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
+    Dialog popAddPostDialog;
+    ImageView popupUserPhoto, popupPostImage, popupAddBtn;
+    TextView popupTitle, popupDescription;
+    ProgressBar popupClickProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +55,7 @@ public class HomeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                popAddPostDialog.show();
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -84,6 +90,39 @@ public class HomeActivity extends AppCompatActivity {
 
         // Update Header
         updateNavHeader();
+
+
+        // Set popup
+        initPopup();
+
+    }
+
+    private void initPopup() {
+        popAddPostDialog = new Dialog(this);
+        popAddPostDialog.setContentView(R.layout.popup_add_post);
+        popAddPostDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popAddPostDialog.getWindow().setLayout(Toolbar.LayoutParams.MATCH_PARENT, Toolbar.LayoutParams.WRAP_CONTENT);
+        popAddPostDialog.getWindow().getAttributes().gravity = Gravity.TOP;
+
+        // popup widgets
+        popupUserPhoto = popAddPostDialog.findViewById(R.id.popup_user_photo);
+        popupPostImage = popAddPostDialog.findViewById(R.id.popup_img);
+        popupTitle = popAddPostDialog.findViewById(R.id.popup_title);
+        popupDescription = popAddPostDialog.findViewById(R.id.popup_description);
+        popupAddBtn = popAddPostDialog.findViewById(R.id.popup_add);
+        popupClickProgress = popAddPostDialog.findViewById(R.id.popup_progressBar);
+
+        // load user photo
+        Glide.with(this).load(firebaseUser.getPhotoUrl()).into(popupUserPhoto);
+
+        // add post click listener
+        popupAddBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupClickProgress.setVisibility(View.VISIBLE);
+                popupAddBtn.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     @Override
